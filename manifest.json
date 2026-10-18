@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Chatbot CrossCheck",
+  "version": "1.0.0",
+  "description": "Chuyển đầu ra qua lại giữa ChatGPT và Claude để double check lẫn nhau.",
+  "permissions": ["storage", "tabs", "sidePanel"],
+  "host_permissions": [
+    "https://claude.ai/*",
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "side_panel": { "default_path": "sidepanel.html" },
+  "action": { "default_title": "Chatbot CrossCheck" },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://claude.ai/*",
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

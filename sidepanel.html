@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chatbot CrossCheck</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+  <h1>CrossCheck</h1>
+
+  <section>
+    <h2>Tab đã gán</h2>
+    <div class="row">
+      <div class="tabinfo"><b>ChatGPT</b><span id="t-chatgpt" class="muted">chưa gán</span></div>
+      <button id="a-chatgpt" class="small">Gán tab này</button>
+    </div>
+    <div class="row">
+      <div class="tabinfo"><b>Claude</b><span id="t-claude" class="muted">chưa gán</span></div>
+      <button id="a-claude" class="small">Gán tab này</button>
+    </div>
+    <p class="hint">Mở tab ChatGPT → bấm "Gán tab này" ở dòng ChatGPT; sang tab Claude → bấm dòng Claude. Nếu mỗi bên chỉ có một tab, extension tự nhận.</p>
+  </section>
+
+  <section>
+    <h2>Cài đặt</h2>
+    <label>Số lần bên kết thúc trả lời thêm (N)
+      <input id="maxTurns" type="number" min="1" max="50" value="3" />
+    </label>
+    <label>Kết thúc ở
+      <select id="endAt">
+        <option value="chatgpt">ChatGPT</option>
+        <option value="claude">Claude</option>
+      </select>
+    </label>
+    <label>Delay trước mỗi lần chuyển (giây)
+      <input id="delaySec" type="number" min="0" max="120" value="5" />
+    </label>
+    <label>Timeout mỗi lượt trả lời (phút) — quá hạn thì báo lỗi và dừng chuỗi
+      <input id="timeoutMin" type="number" min="1" max="60" value="10" />
+    </label>
+    <label>Timeout tổng cho cả lần chạy (phút, 0 = không giới hạn) — quá hạn thì tạm dừng
+      <input id="totalTimeoutMin" type="number" min="0" max="600" value="0" />
+    </label>
+    <label class="check"><input id="useAgree" type="checkbox" /> Dừng sớm khi cả hai cùng [AGREE]</label>
+    <label class="check"><input id="stopGen" type="checkbox" /> Nút Dừng cũng bấm Stop generation của site</label>
+
+    <details>
+      <summary>Đề bài gốc &amp; template prompt</summary>
+      <label>Đề bài gốc (gửi kèm ở lượt đầu tiên sang Claude, có thể để trống)
+        <textarea id="problem" rows="4"></textarea>
+      </label>
+      <label>Template gửi sang Claude ({{content}}, {{problem}})
+        <textarea id="tplToClaude" rows="7"></textarea>
+      </label>
+      <label>Template gửi sang ChatGPT ({{content}})
+        <textarea id="tplToChatGPT" rows="7"></textarea>
+      </label>
+      <button id="resetTpl" class="small">Khôi phục mặc định</button>
+    </details>
+  </section>
+
+  <section>
+    <label>Ghi chú của tôi cho lượt chuyển kế tiếp (dùng 1 lần, có thể để trống)
+      <textarea id="nextNote" rows="2" placeholder="Ví dụ: hãy tập trung kiểm tra bước 3..."></textarea>
+    </label>
+    <div class="actions vertical">
+      <button id="startGpt" class="primary">▶ Từ ChatGPT → Claude</button>
+      <button id="startClaude" class="primary">▶ Từ Claude → ChatGPT</button>
+      <button id="stop" class="danger">⏸ Tạm dừng</button>
+    </div>
+    <p class="hint">Bên nguồn = tab có câu trả lời mới nhất (đã xong) để chuyển sang tab còn lại. Tạm dừng rồi tự nhắn ở tab nào cũng được, sau đó chọn lại bên nguồn.</p>
+    <div id="status" class="status">Chưa chạy</div>
+    <div id="progress" class="muted"></div>
+  </section>
+
+  <section>
+    <h2>Nhật ký</h2>
+    <ol id="log" class="log"></ol>
+  </section>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
